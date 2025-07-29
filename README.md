@@ -27,15 +27,24 @@ These are the basic steps for working with the starter. For detailed guidance on
    ```
    git clone https://github.com/<your organization>/<your-repo-name>.git
    ```
-3. Run `npm i` to install dependencies.
+3. Run `pnpm i` to install dependencies.
 4. Open the project in your editor.
 5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
 6. Update the `package.json` to match your details.
-7. Run `npm lint` to check for errors or `npm lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
+7. Change the repository name in the `.env` file:
+   ```
+   REPO_NAME=your-custom-repo-name
+   ```
+8. Run `pnpm lint` to check for errors or `pnpm lintfix` to automatically fix errors when possible.
+9. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
+10. To deploy and test your nodes with Docker, run:
+    ```
+    pnpm run deploy
+    ```
+    This will compile TypeScript, build icons, and start the Docker containers defined in `docker-compose.yml`.
+11. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
+12. Update the LICENSE file to use your details.
+13. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
 
 ## More information
 
