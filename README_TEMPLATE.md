@@ -7,6 +7,7 @@ _App/service name_ is _one or two sentences describing the service this node int
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
 [Installation](#installation)  
+[Configuration](#configuration)
 [Operations](#operations)  
 [Credentials](#credentials)  <!-- delete if no auth needed -->  
 [Compatibility](#compatibility)  
@@ -17,6 +18,59 @@ _App/service name_ is _one or two sentences describing the service this node int
 ## Installation
 
 Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
+
+## Configuration
+
+### Changing Repository Name
+
+To change the repository name, you need to update two files:
+
+1. Update the `REPO_NAME` variable in the `.env` file:
+
+```bash
+# .env file
+REPO_NAME=your-custom-repo-name
+```
+
+2. Update the following fields in `package.json` to match your repository name:
+
+```json
+{
+  "name": "n8n-nodes-your-custom-repo-name",
+  ...
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/n8n-nodes-your-custom-repo-name.git"
+  },
+  ...
+}
+```
+
+Make sure:
+- The `name` field follows the format `n8n-nodes-[your-custom-repo-name]`
+- The repository URL is updated with your GitHub username and repository name
+- Both values match the `REPO_NAME` in the `.env` file
+
+### Deployment
+
+To deploy the node, run the following command:
+
+```bash
+pnpm run deploy
+```
+
+This command will:
+1. Compile TypeScript files
+2. Build icons
+3. Start the Docker containers using docker-compose
+
+The deployment uses Docker Compose to set up an n8n instance with your custom nodes. The Docker Compose configuration:
+- Uses the latest n8n image
+- Exposes n8n on port 5000
+- Mounts your compiled node code into the n8n container
+- Uses the repository name from the `.env` file to properly mount your custom nodes
+
+After deployment, you can access n8n at http://localhost:5000
 
 ## Operations
 
