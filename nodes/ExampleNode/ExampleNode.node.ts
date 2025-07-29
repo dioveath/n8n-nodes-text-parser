@@ -8,13 +8,13 @@ import { NodeConnectionType, NodeOperationError } from 'n8n-workflow';
 
 export class ExampleNode implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Example Node',
-		name: 'exampleNode',
+		displayName: 'Beautiful New Node',
+		name: 'beautifulNewNode',
 		group: ['transform'],
 		version: 1,
-		description: 'Basic Example Node',
+		description: 'A new node that is beautiful',
 		defaults: {
-			name: 'Example Node',
+			name: 'Beautiful New Node',
 		},
 		inputs: [NodeConnectionType.Main],
 		outputs: [NodeConnectionType.Main],
@@ -27,6 +27,22 @@ export class ExampleNode implements INodeType {
 				name: 'myString',
 				type: 'string',
 				default: '',
+				placeholder: 'Placeholder value',
+				description: 'The description text',
+			},
+			{
+				displayName: 'My Number',
+				name: 'myNumber',
+				type: 'number',
+				default: 0,
+				placeholder: 'Placeholder value',
+				description: 'The description text',
+			},
+			{
+				displayName: 'My Boolean',
+				name: 'myBoolean',
+				type: 'boolean',
+				default: false,
 				placeholder: 'Placeholder value',
 				description: 'The description text',
 			},
