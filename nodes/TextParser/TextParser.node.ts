@@ -5,7 +5,8 @@ import type {
 	INodeTypeDescription,
 } from 'n8n-workflow';
 import { NodeConnectionType } from 'n8n-workflow';
-import * as segmentation from './action/segmentation.operation'
+import * as segmentation from './action/segmentation.operation';
+import * as split from './action/split.operation';
 
 export class TextParser implements INodeType {
 	description: INodeTypeDescription = {
@@ -52,11 +53,26 @@ export class TextParser implements INodeType {
 				default: 'sentenceSegmentation'
 			},
 			{
-				displayName: "Number of Characters",
-				name: 'numOfCharacters',
+				displayName: 'Max Characters',
+				description: 'Number of maximum characters for splitting.',
+				name: 'maxChars',
 				type: 'number',
 				placeholder: '2000',
 				default: 2000,
+				noDataExpression: false,
+				displayOptions: {
+					show: {
+						operation: ['splitToNCharacters']
+					}
+				}
+			},
+			{
+				displayName: 'Overlap Characters',
+				description: 'Number of characters that gets overlapped while splitting.',
+				name: 'overlapChars',
+				type: 'number',
+				placeholder: '100',
+				default: 0,
 				noDataExpression: false,
 				displayOptions: {
 					show: {
@@ -71,12 +87,14 @@ export class TextParser implements INodeType {
 		const items = this.getInputData();
 		const returnData: INodeExecutionData[] = []
 
-
 		for (let i = 0; i < items.length; i++) {
 			const operation = this.getNodeParameter('operation', i) as string;
 
 			if (operation === 'sentenceSegmentation') {
 				const result = await segmentation.execute.call(this, items[i]);
+				returnData.push(result)
+			} else if (operation === 'splitToNCharacters') {
+				const result = await split.execute.call(this, items[i]);
 				returnData.push(result)
 			}
 		}
