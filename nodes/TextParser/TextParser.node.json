@@ -1,0 +1,20 @@
+{
+	"node": "n8n-nodes-base.text-parser",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Utility"],
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/dioveath/n8n-nodes-text-parser"
+			}
+		]
+	},
+	"alias": [
+        "text",
+        "text parsing",
+        "split text",
+        "text manipulation",
+        "string"        
+	]
+}
