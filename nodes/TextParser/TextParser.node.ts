@@ -32,7 +32,7 @@ export class TextParser implements INodeType {
 				},
 				default: '',
 				placeholder: 'Write a long text...',
-				description: 'Text that will be transformed.'
+				description: 'Text that will be transformed'
 			},
 			{
 				displayName: 'Operation',
@@ -43,19 +43,19 @@ export class TextParser implements INodeType {
 					{
 						name: 'Sentence Segmentation',
 						value: 'sentenceSegmentation',
-						action: 'Segment Text To Sentences'
+						action: 'Segment text to sentences'
 					},
 					{
 						name: 'Split to N Characters Text',
 						value: 'splitToNCharacters',
-						action: 'Split to N Characters Text'
+						action: 'Split to N characters text'
 					}
 				],
 				default: 'sentenceSegmentation'
 			},
 			{
 				displayName: 'Max Characters',
-				description: 'Number of maximum characters for splitting.',
+				description: 'Number of maximum characters for splitting',
 				name: 'maxChars',
 				type: 'number',
 				placeholder: '2000',
@@ -69,7 +69,7 @@ export class TextParser implements INodeType {
 			},
 			{
 				displayName: 'Overlap Characters',
-				description: 'Number of characters that gets overlapped while splitting.',
+				description: 'Number of characters that gets overlapped while splitting',
 				name: 'overlapChars',
 				type: 'number',
 				placeholder: '100',
