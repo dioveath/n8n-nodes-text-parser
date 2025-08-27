@@ -1,0 +1,86 @@
+import type {
+	IExecuteFunctions,
+	INodeExecutionData,
+	INodeType,
+	INodeTypeDescription,
+} from 'n8n-workflow';
+import { NodeConnectionType } from 'n8n-workflow';
+import * as segmentation from './action/segmentation.operation'
+
+export class TextParser implements INodeType {
+	description: INodeTypeDescription = {
+		displayName: 'Text Parser',
+		name: 'textParser',
+		group: ['transform'],
+		version: 1,
+		description: 'A node that parse and analyze large text.',
+		defaults: {
+			name: 'Parse Text',
+		},
+		inputs: [NodeConnectionType.Main],
+		outputs: [NodeConnectionType.Main],
+		usableAsTool: true,
+		properties: [
+			{
+				displayName: 'Text',
+				name: 'text',
+				type: 'string',
+				typeOptions: {
+					rows: 6,
+				},
+				default: '',
+				placeholder: 'Write a long text...',
+				description: 'Text that will be transformed.'
+			},
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				options: [
+					{
+						name: 'Sentence Segmentation',
+						value: 'sentenceSegmentation',
+						action: 'Segment Text To Sentences'
+					},
+					{
+						name: 'Split to N Characters Text',
+						value: 'splitToNCharacters',
+						action: 'Split to N Characters Text'
+					}
+				],
+				default: 'sentenceSegmentation'
+			},
+			{
+				displayName: "Number of Characters",
+				name: 'numOfCharacters',
+				type: 'number',
+				placeholder: '2000',
+				default: 2000,
+				noDataExpression: false,
+				displayOptions: {
+					show: {
+						operation: ['splitToNCharacters']
+					}
+				}
+			}
+		],
+	};
+
+	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+		const items = this.getInputData();
+		const returnData: INodeExecutionData[] = []
+
+
+		for (let i = 0; i < items.length; i++) {
+			const operation = this.getNodeParameter('operation', i) as string;
+
+			if (operation === 'sentenceSegmentation') {
+				const result = await segmentation.execute.call(this, items[i]);
+				returnData.push(result)
+			}
+		}
+
+		return this.prepareOutputData(returnData)
+	}
+}
