@@ -1,13 +1,16 @@
 // action/writeToImage.operation.ts
 import { createCanvas, loadImage, SKRSContext2D } from '@napi-rs/canvas';
 import { IExecuteFunctions, INodeExecutionData, IPairedItemData, NodeApiError } from 'n8n-workflow';
+import { Parser } from 'expr-eval';
 
 export async function execute(this: IExecuteFunctions, item: INodeExecutionData): Promise<INodeExecutionData> {
     const itemIndex = (item["pairedItem"] as IPairedItemData).item
     const text = this.getNodeParameter('text', itemIndex) as string;
     const imageBinaryField = this.getNodeParameter('imageBinaryField', itemIndex) as string;
-    // const textBoxOptions = this.getNodeParameter('textBoxOptions', 0) as object;
-    // const textOptions = this.getNodeParameter('textOptions', 0) as object;
+    const writeOptions = this.getNodeParameter('drawOptions', itemIndex) as string;
+
+    const parsedOptions = JSON.parse(writeOptions)
+    this.logger.info(`Write Otions: ${JSON.stringify(parsedOptions, null, 2)}`)
 
     const binaryDataBuffer = await this.helpers.getBinaryDataBuffer(itemIndex, imageBinaryField)
     if (!binaryDataBuffer) {
@@ -18,22 +21,34 @@ export async function execute(this: IExecuteFunctions, item: INodeExecutionData)
     }
 
     const img = await loadImage(binaryDataBuffer);
+    const { box: inputBox, options } = parsedOptions;
 
-    const box: Box = { x: 0, y: 0, width: img.width / 2, height: img.height };
-    const padding: Padding = { top: 64, right: 64, bottom: 64, left: 64 };
+    // const defaultBox: Box = { x: 0, y: 0, width: img.width / 2, height: img.height };    
+    // use { Parser } from 'expr-eval' to evaluate dynamic width with img.width and img.height
+    // for example _box.x = "w/2", we'll evaluate this dynamically    
 
-    const options: DrawOptions = {
-        padding,
-        align: 'left',
-        style: {
-            fontSize: 60
-        },
-        keywords: []        
+    const vars = {
+        w: img.width,
+        h: img.height
     }
 
-    const canvas = await drawTextInBox(binaryDataBuffer, text, box, options)
+    const evalField = (value: string | number): number => {
+        if (typeof value === "number") return value;
+        const parser = new Parser();
+        return parser.parse(value).evaluate(vars)
+    }
 
-    const buffer = await canvas.encode('png')
+    const box: Box = {
+        x: evalField(inputBox.x),
+        y: evalField(inputBox.y),
+        width: evalField(inputBox.width),
+        height: evalField(inputBox.height)
+    }
+
+    this.logger.info(`Options: ${JSON.stringify(options, null, 2)}`)
+    const canvas = await drawTextInBox(binaryDataBuffer, text, box, options);
+
+    const buffer = await canvas.encode('png');
     const base64 = Buffer.from(buffer).toString('base64');
 
     const mimeType = 'image/png';
@@ -135,6 +150,8 @@ async function drawTextInBox(imagePath: string | Buffer, text: string, box: Box,
     ctx.strokeRect(box.x, box.y, box.width, box.height);
     ctx.strokeStyle = 'blue';
     ctx.strokeRect(innerBox.x, innerBox.y, innerBox.width, innerBox.height);
+
+    console.log(`fontSize: ${fontSize}`)
 
     let finalFontSize = fontSize ?? innerBox.height;
     let lines: string[] = [];
