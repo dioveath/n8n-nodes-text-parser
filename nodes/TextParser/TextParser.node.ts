@@ -7,6 +7,7 @@ import type {
 import { NodeConnectionType } from 'n8n-workflow';
 import * as segmentation from './action/segmentation.operation';
 import * as split from './action/split.operation';
+import * as writeToImage from './action/writeToImage.operation';
 
 export class TextParser implements INodeType {
 	description: INodeTypeDescription = {
@@ -49,6 +50,11 @@ export class TextParser implements INodeType {
 						name: 'Split to N Characters Text',
 						value: 'splitToNCharacters',
 						action: 'Split to N characters text'
+					},
+					{
+						name: 'Write to Image with Wrapped Text',
+						value: 'writeToImageWithWrappedText',
+						action: 'Create image with wrapped text'
 					}
 				],
 				default: 'sentenceSegmentation'
@@ -80,6 +86,154 @@ export class TextParser implements INodeType {
 						operation: ['splitToNCharacters']
 					}
 				}
+			},
+			{
+				displayName: 'Image Binary Field',
+				name: 'imageBinaryField',
+				type: 'string',
+				default: 'data',
+				placeholder: 'data',
+				description: 'Data field of the image binary',
+				displayOptions: {
+					show: {
+						operation: ['writeToImageWithWrappedText']
+					}
+				}
+			},
+			{
+				displayName: 'Write Options',
+				name: 'writeOptions',
+				type: 'fixedCollection',
+				typeOptions: {
+					sortable: false,
+				},
+				default: {},
+				placeholder: 'Add Options',
+				description: 'Add configuration options',
+				required: false,
+				displayOptions: {
+					show: {
+						operation: ['writeToImageWithWrappedText']
+					}
+				},
+				options: [
+					{
+						displayName: 'Position And Size',
+						name: 'positionAndSize',
+						values: [
+							{
+								displayName: "X Position",
+								name: "x",
+								type: "number",
+								default: 0,
+								description: "X coordinate of the text area"
+							},
+							{
+								displayName: "Y Position",
+								name: "y",
+								type: "number",
+								default: 0,
+								description: "Y coordinate of the text area"
+							},
+							{
+								displayName: "Width",
+								name: "width",
+								type: "number",
+								default: 100,
+								description: "Width of the text area"
+							},
+							{
+								displayName: "Height",
+								name: "height",
+								type: "number",
+								default: 50,
+								description: "Height of the text area"
+							}
+						]
+					},
+					{
+						displayName: 'Padding Values',
+						name: 'paddingValues',
+						values: [
+							{
+								displayName: "Top",
+								name: "top",
+								type: "number",
+								default: 16,
+								description: "Padding from the top"
+							},
+							{
+								displayName: "Right",
+								name: "right",
+								type: "number",
+								default: 16,
+								description: "Padding from the right"
+							},
+							{
+								displayName: "Bottom",
+								name: "bottom",
+								type: "number",
+								default: 16,
+								description: "Padding from the bottom"
+							},
+							{
+								displayName: "Left",
+								name: "left",
+								type: "number",
+								default: 16,
+								description: "Padding from the left"
+							}
+						]
+					},
+					{
+						displayName: 'Text Style',
+						name: 'textStyle',
+						values: [
+							{
+								displayName: 'Font Size',
+								name: 'fontSize',
+								type: 'number',
+								default: undefined,
+								description: 'Font size in pixels (undefined = auto-fit)',
+							},
+							{
+								displayName: 'Font Family',
+								name: 'fontFamily',
+								type: 'string',
+								default: 'Arial',
+								description: 'Font family like Arial, Inter, etc.',
+							},
+							{
+								displayName: 'Font Color',
+								name: 'fontColor',
+								type: 'string',
+								default: '#ffffff',
+								description: 'Font color in hex format',
+							},
+							{
+								displayName: 'Line Spacing',
+								name: 'lineSpacing',
+								type: 'number',
+								default: 1.2,
+								description: 'Line spacing multiplier',
+							},
+							{
+								displayName: 'Stroke Color',
+								name: 'strokeColor',
+								type: 'string',
+								default: '#000000',
+								description: 'Stroke color in hex format',
+							},
+							{
+								displayName: 'Stroke Width',
+								name: 'strokeWidth',
+								type: 'number',
+								default: 0,
+								description: 'Stroke width in pixels',
+							}
+						]
+					}
+				]
 			}
 		],
 	};
@@ -93,10 +247,13 @@ export class TextParser implements INodeType {
 
 			if (operation === 'sentenceSegmentation') {
 				const result = await segmentation.execute.call(this, items[i]);
-				returnData.push(result)
+				returnData.push(result);
 			} else if (operation === 'splitToNCharacters') {
 				const result = await split.execute.call(this, items[i]);
-				returnData.push(result)
+				returnData.push(result);
+			} else if (operation === 'writeToImageWithWrappedText') {
+				const result = await writeToImage.execute.call(this, items[i])
+				returnData.push(result);
 			}
 		}
 

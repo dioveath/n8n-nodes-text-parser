@@ -57,6 +57,8 @@
     "n8n-workflow": "*"
   },
   "dependencies": {
+    "@napi-rs/canvas": "^0.1.80",
+    "@types/node": "^24.6.2",
     "wink-eng-lite-web-model": "^1.8.1",
     "wink-nlp": "^2.4.0"
   }
