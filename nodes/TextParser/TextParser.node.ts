@@ -4,10 +4,10 @@ import type {
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeApiError, NodeConnectionType } from 'n8n-workflow';
 import * as segmentation from './action/segmentation.operation';
 import * as split from './action/split.operation';
-import * as writeToImage from './action/writeToImage.operation';
+// import * as writeToImage from './action/writeToImage.operation';
 
 export class TextParser implements INodeType {
 	description: INodeTypeDescription = {
@@ -133,8 +133,12 @@ export class TextParser implements INodeType {
 				const result = await split.execute.call(this, items[i]);
 				returnData.push(result);
 			} else if (operation === 'writeToImageWithWrappedText') {
-				const result = await writeToImage.execute.call(this, items[i])
-				returnData.push(result);
+				throw new NodeApiError(this.getNode(), {
+					message: "Currently, not supported!",
+					description: "Removed in verison 0.1.5, for better package support across alpine based docker images."
+				})
+				// const result = await writeToImage.execute.call(this, items[i])
+				// returnData.push(result);
 			}
 		}
 
