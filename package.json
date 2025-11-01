@@ -1,6 +1,6 @@
 {
   "name": "@raisaroj/n8n-nodes-text-parser",
-  "version": "0.1.52",
+  "version": "0.1.53",
   "description": "n8n node to parse and analyze text, extract characters, dialogues, and structure from fiction or large documents.",
   "keywords": [
     "n8n-community-node-package",
@@ -42,7 +42,8 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "nodes": [
-      "dist/nodes/TextParser/TextParser.node.js"
+      "dist/nodes/TextParser/TextParser.node.js",
+      "dist/nodes/TextAligner/TextAligner.node.js"
     ]
   },
   "devDependencies": {
