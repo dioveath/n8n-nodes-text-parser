@@ -13,7 +13,7 @@ export class TextParser implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Text Parser',
 		name: 'textParser',
-		icon: { dark: 'file:TextParser.dark.svg', light: 'file:TextParser.light.svg' },
+		icon: { dark: 'file:TextParser.icon.svg', light: 'file:TextParser.icon.svg' },
 		group: ['transform'],
 		version: [1, 1],
 		description: 'A node that parse and analyze large text.',
