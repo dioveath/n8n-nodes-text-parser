@@ -1,6 +1,6 @@
 {
   "name": "@raisaroj/n8n-nodes-text-parser",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "n8n node to parse and analyze text, extract characters, dialogues, and structure from fiction or large documents.",
   "keywords": [
     "n8n-community-node-package",
@@ -57,7 +57,6 @@
     "n8n-workflow": "*"
   },
   "dependencies": {
-    "@napi-rs/canvas": "^0.1.80",
     "@types/node": "^24.6.2",
     "expr-eval": "^2.0.2",
     "wink-eng-lite-web-model": "^1.8.1",
