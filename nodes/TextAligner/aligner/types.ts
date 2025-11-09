@@ -17,5 +17,6 @@ export interface StoryBeatCandidate {
     fuzzyThreshold?: number;
     maxExpansion?: number;
     maxContraction?: number;
+    boundaryMode?: "sentence" | "word";
   }
   
