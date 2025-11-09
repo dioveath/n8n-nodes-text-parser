@@ -52,6 +52,17 @@ export class TextAligner implements INodeType {
 				description: 'Maximum ratio of contraction when matching smaller fragments',
 			},
 			{
+				displayName: 'Boundary Mode',
+				name: 'boundaryMode',
+				type: 'options',
+				default: 'sentence',
+				options: [
+					{ name: 'Sentence', value: 'sentence', description: 'Aligns segments to sentences' },
+					{ name: 'Word', value: 'word', description: 'Aligns segments to words' },
+				],
+				description: 'The mode to use for aligning segments',
+			},
+			{
 				displayName: 'Output Mode',
 				name: 'outputMode',
 				type: 'options',

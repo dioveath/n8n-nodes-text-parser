@@ -1,5 +1,5 @@
 import { IExecuteFunctions, INodeExecutionData, IPairedItemData } from "n8n-workflow";
-import { alignBeats, StoryBeatCandidate } from "../aligner";
+import { alignBeats, AlignmentOptions, StoryBeatCandidate } from "../aligner";
 
 export async function execute(this: IExecuteFunctions, item: INodeExecutionData): Promise<INodeExecutionData> {
     const itemIndex = (item["pairedItem"] as IPairedItemData).item
@@ -8,9 +8,10 @@ export async function execute(this: IExecuteFunctions, item: INodeExecutionData)
     const fuzzyThreshold = this.getNodeParameter('fuzzyThreshold', itemIndex) as number;
     const maxExpansion = this.getNodeParameter('maxExpansion', itemIndex) as number;
     const maxContraction = this.getNodeParameter('maxContraction', itemIndex) as number;
+    const boundaryMode = this.getNodeParameter('boundaryMode', itemIndex) as "sentence" | "word";
     const outputMode = this.getNodeParameter('outputMode', itemIndex) as string;
 
-    const options = { fuzzyThreshold, maxExpansion, maxContraction };
+    const options: AlignmentOptions = { fuzzyThreshold, maxExpansion, maxContraction, boundaryMode };
 
     const segmentsArray = JSON.parse(segments);
     const results = alignBeats(fullText, segmentsArray as StoryBeatCandidate[], options);
