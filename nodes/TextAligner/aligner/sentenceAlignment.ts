@@ -50,7 +50,7 @@ function computeSentences(text: string): Bounds[] {
     let ended = false;
     while (j < len) {
       const ch = text[j];
-      if (ch === "." || ch === "!" || ch === "?" || ch === "…") {
+      if (ch === "." || ch === "!" || ch === "?" || ch === "…" || ch === "।") {
         j++;
         while (j < len && /["'”’)\]\}\u00BB>]+/.test(text[j])) j++;
         while (j < len && /\s/.test(text[j])) j++;
